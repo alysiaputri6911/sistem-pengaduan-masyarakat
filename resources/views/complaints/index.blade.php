@@ -2,236 +2,195 @@
 
 @section('content')
 
-<div class="container">
+<div class="container py-4">
 
-    <div class="card shadow border-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Pengaduan Saya</h2>
+            <p class="text-muted mb-0">
+                Daftar seluruh pengaduan yang telah Anda buat.
+            </p>
+        </div>
 
-        <div class="card-header bg-primary text-white">
+        <a href="{{ route('complaints.create') }}" class="btn btn-primary">
+            + Buat Pengaduan
+        </a>
+    </div>
 
-            <div class="d-flex justify-content-between align-items-center">
+    {{-- Pesan Berhasil --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
 
-                <h4 class="mb-0">
-                    Detail Pengaduan
-                </h4>
+            {{ session('success') }}
 
-                <a href="{{ route('complaints.index') }}"
-                   class="btn btn-light btn-sm">
+            <button class="btn-close"
+                data-bs-dismiss="alert"></button>
 
-                    Kembali
+        </div>
+    @endif
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            @if($complaints->count())
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>No</th>
+
+                            <th>Judul</th>
+
+                            <th>Kategori</th>
+
+                            <th>Status</th>
+
+                            <th>Tanggal</th>
+
+                            <th width="180">
+                                Aksi
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach($complaints as $complaint)
+
+                        <tr>
+
+                            <td>
+                                {{ $loop->iteration }}
+                            </td>
+
+                            <td>
+
+                                <strong>
+                                    {{ $complaint->title }}
+                                </strong>
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    {{ Str::limit($complaint->description,60) }}
+
+                                </small>
+
+                            </td>
+
+                            <td>
+
+                                {{ $complaint->category }}
+
+                            </td>
+
+                            <td>
+
+                                @if($complaint->status=='open')
+
+                                    <span class="badge bg-warning text-dark">
+                                        Open
+                                    </span>
+
+                                @elseif($complaint->status=='progress')
+
+                                    <span class="badge bg-info">
+                                        Progress
+                                    </span>
+
+                                @elseif($complaint->status=='resolved')
+
+                                    <span class="badge bg-success">
+                                        Resolved
+                                    </span>
+
+                                @else
+
+                                    <span class="badge bg-secondary">
+
+                                        {{ $complaint->status }}
+
+                                    </span>
+
+                                @endif
+
+                            </td>
+
+                            <td>
+
+                                {{ $complaint->created_at->format('d M Y') }}
+
+                            </td>
+
+                            <td>
+
+                                <a href="{{ route('complaints.show',$complaint->id) }}"
+                                    class="btn btn-sm btn-info text-white">
+
+                                    Detail
+
+                                </a>
+
+                                <form
+                                    action="{{ route('complaints.destroy',$complaint->id) }}"
+                                    method="POST"
+                                    class="d-inline">
+
+                                    @csrf
+
+                                    @method('DELETE')
+
+                                    <button
+                                        class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Yakin ingin menghapus pengaduan ini?')">
+
+                                        Hapus
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                        @endforeach
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            @else
+
+            <div class="text-center py-5">
+
+                <h5 class="text-muted">
+
+                    Belum ada pengaduan.
+
+                </h5>
+
+                <a href="{{ route('complaints.create') }}"
+                    class="btn btn-primary mt-3">
+
+                    Buat Pengaduan Pertama
 
                 </a>
 
             </div>
 
-        </div>
-
-        <div class="card-body">
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Kode Pengaduan</strong>
-                </div>
-
-                <div class="col-md-8">
-                    {{ $complaint->complaint_code }}
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Judul</strong>
-                </div>
-
-                <div class="col-md-8">
-                    {{ $complaint->title }}
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Kategori</strong>
-                </div>
-
-                <div class="col-md-8">
-                    {{ $complaint->category }}
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Lokasi</strong>
-                </div>
-
-                <div class="col-md-8">
-                    {{ $complaint->location }}
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Nama Pelapor</strong>
-                </div>
-
-                <div class="col-md-8">
-                    {{ $complaint->complainant_name }}
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>No HP</strong>
-                </div>
-
-                <div class="col-md-8">
-                    {{ $complaint->phone }}
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Email</strong>
-                </div>
-
-                <div class="col-md-8">
-                    {{ $complaint->email }}
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Prioritas</strong>
-                </div>
-
-                <div class="col-md-8">
-
-                    <span class="badge bg-{{ $complaint->priority_badge }}">
-                        {{ $complaint->priority_label }}
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Status</strong>
-                </div>
-
-                <div class="col-md-8">
-
-                    <span class="badge bg-{{ $complaint->status_badge }}">
-                        {{ $complaint->status_label }}
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Tanggal Pengaduan</strong>
-                </div>
-
-                <div class="col-md-8">
-                    {{ $complaint->created_at->format('d M Y H:i') }}
-                </div>
-
-            </div>
-
-            <hr>
-
-            <h5>Deskripsi Pengaduan</h5>
-
-            <div class="alert alert-light border">
-
-                {{ $complaint->description }}
-
-            </div>
-
-        </div>
-
-    </div>
-
-    {{-- Respon Admin --}}
-
-    <div class="card shadow border-0 mt-4">
-
-        <div class="card-header bg-success text-white">
-
-            <h5 class="mb-0">
-
-                Riwayat Tanggapan
-
-            </h5>
-
-        </div>
-
-        <div class="card-body">
-
-            @forelse($complaint->responses as $response)
-
-                <div class="border rounded p-3 mb-3">
-
-                    <div class="d-flex justify-content-between">
-
-                        <div>
-
-                            <strong>
-                                {{ $response->responder_name }}
-                            </strong>
-
-                            <span class="badge bg-info">
-
-                                {{ $response->responder_role }}
-
-                            </span>
-
-                        </div>
-
-                        <small>
-
-                            {{ $response->created_at->format('d M Y H:i') }}
-
-                        </small>
-
-                    </div>
-
-                    <hr>
-
-                    <p class="mb-0">
-
-                        {{ $response->message }}
-
-                    </p>
-
-                </div>
-
-            @empty
-
-                <div class="alert alert-warning">
-
-                    Belum ada tanggapan dari admin.
-
-                </div>
-
-            @endforelse
+            @endif
 
         </div>
 

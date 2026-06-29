@@ -1,2 +1,33 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
+body{
 
+    background:#eef3f8;
+
+}
+
+.card{
+
+    border-radius:20px;
+
+}
+
+.form-control{
+
+    height:50px;
+    border-radius:12px;
+
+}
+
+.btn{
+
+    border-radius:12px;
+    height:50px;
+    font-weight:600;
+
+}
+
+.bg-primary{
+
+    background:linear-gradient(135deg,#0d6efd,#0a58ca)!important;
+
+}

@@ -12,14 +12,25 @@ class ComplaintController extends Controller
      * Menampilkan daftar pengaduan milik user yang login.
      */
     public function index()
-    {
-        $complaints = Complaint::where('user_id', Auth::id())
-            ->latest()
-            ->get();
+{
+    if(auth()->user()->role=='admin'){
 
-        return view('complaints.index', compact('complaints'));
+        $complaints=Complaint::latest()->get();
+
+    }else{
+
+        $complaints=Complaint::where(
+            'user_id',
+            auth()->id()
+        )->latest()->get();
+
     }
 
+    return view(
+        'complaints.index',
+        compact('complaints')
+    );
+}
     /**
      * Menampilkan form tambah pengaduan.
      */
