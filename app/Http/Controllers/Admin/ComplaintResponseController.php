@@ -10,59 +10,49 @@ use Illuminate\Http\Request;
 class ComplaintResponseController extends Controller
 {
     public function store(Request $request, Complaint $complaint)
-{
-    $request->validate([
+    {
+        $request->validate([
+            'message' => 'required',
+            'attachment' => 'nullable|image|max:2048',
+            'status' => 'required',
+            'priority' => 'required'
+        ]);
 
-        'message' => 'required',
+        $photo = null;
 
-        'attachment' => 'nullable|image|max:2048',
+        if ($request->hasFile('attachment')) {
 
-        'status' => 'required',
+            $photo = $request->file('attachment')
+                ->store('responses', 'public');
+        }
 
-        'priority' => 'required'
+        ComplaintResponse::create([
 
-    ]);
+            'complaint_id' => $complaint->id,
 
-    $photo = null;
+            'responder_name' => auth()->user()->name,
 
-    if($request->hasFile('attachment')){
+            'responder_role' => 'Admin',
 
-        $photo = $request
-            ->file('attachment')
-            ->store('responses','public');
+            'message' => $request->message,
 
+            'attachment' => $photo,
+
+            'is_final' => $request->has('is_final')
+
+        ]);
+
+        $complaint->update([
+
+            'status' => $request->status,
+
+            'priority' => $request->priority
+
+        ]);
+
+        return back()->with(
+            'success',
+            'Respon berhasil dikirim.'
+        );
     }
-
-    ComplaintResponse::create([
-
-        'complaint_id' => $complaint->id,
-
-        'responder_name' => auth()->user()->name,
-
-        'responder_role' => 'Admin',
-
-        'message' => $request->message,
-
-        'attachment' => $photo,
-
-        'is_final' => $request->has('is_final')
-
-    ]);
-
-    $complaint->update([
-
-        'status' => $request->status,
-
-        'priority' => $request->priority
-
-    ]);
-
-    return back()->with(
-
-        'success',
-
-        'Respon berhasil dikirim.'
-
-    );
-}
 }

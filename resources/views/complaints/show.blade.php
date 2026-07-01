@@ -4,6 +4,7 @@
 
 <div class="container">
 
+    {{-- DETAIL PENGADUAN --}}
     <div class="card shadow border-0">
 
         <div class="card-header bg-primary text-white">
@@ -17,7 +18,7 @@
                 <a href="{{ route('complaints.index') }}"
                    class="btn btn-light btn-sm">
 
-                    Kembali
+                    ← Kembali
 
                 </a>
 
@@ -27,133 +28,87 @@
 
         <div class="card-body">
 
-            <div class="row mb-3">
+            <table class="table table-bordered">
 
-                <div class="col-md-4">
-                    <strong>Kode Pengaduan</strong>
-                </div>
+                <tr>
+                    <th width="25%">Kode Pengaduan</th>
+                    <td>{{ $complaint->complaint_code }}</td>
+                </tr>
 
-                <div class="col-md-8">
-                    {{ $complaint->complaint_code }}
-                </div>
+                <tr>
+                    <th>Judul</th>
+                    <td>{{ $complaint->title }}</td>
+                </tr>
 
-            </div>
+                <tr>
+                    <th>Kategori</th>
+                    <td>{{ $complaint->category }}</td>
+                </tr>
 
-            <div class="row mb-3">
+                <tr>
+                    <th>Lokasi</th>
+                    <td>{{ $complaint->location }}</td>
+                </tr>
 
-                <div class="col-md-4">
-                    <strong>Judul</strong>
-                </div>
+                <tr>
+                    <th>Nama Pelapor</th>
+                    <td>{{ $complaint->complainant_name }}</td>
+                </tr>
 
-                <div class="col-md-8">
-                    {{ $complaint->title }}
-                </div>
+                <tr>
+                    <th>No HP</th>
+                    <td>{{ $complaint->phone }}</td>
+                </tr>
 
-            </div>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ $complaint->email }}</td>
+                </tr>
 
-            <div class="row mb-3">
+                <tr>
+                    <th>Prioritas</th>
 
-                <div class="col-md-4">
-                    <strong>Kategori</strong>
-                </div>
+                    <td>
 
-                <div class="col-md-8">
-                    {{ $complaint->category }}
-                </div>
+                        <span class="badge bg-{{ $complaint->priority_badge }}">
 
-            </div>
+                            {{ $complaint->priority_label }}
 
-            <div class="row mb-3">
+                        </span>
 
-                <div class="col-md-4">
-                    <strong>Lokasi</strong>
-                </div>
+                    </td>
 
-                <div class="col-md-8">
-                    {{ $complaint->location }}
-                </div>
+                </tr>
 
-            </div>
+                <tr>
 
-            <div class="row mb-3">
+                    <th>Status</th>
 
-                <div class="col-md-4">
-                    <strong>Nama Pelapor</strong>
-                </div>
+                    <td>
 
-                <div class="col-md-8">
-                    {{ $complaint->complainant_name }}
-                </div>
+                        <span class="badge bg-{{ $complaint->status_badge }}">
 
-            </div>
+                            {{ $complaint->status_label }}
 
-            <div class="row mb-3">
+                        </span>
 
-                <div class="col-md-4">
-                    <strong>No HP</strong>
-                </div>
+                    </td>
 
-                <div class="col-md-8">
-                    {{ $complaint->phone }}
-                </div>
+                </tr>
 
-            </div>
+                <tr>
 
-            <div class="row mb-3">
+                    <th>Tanggal Pengaduan</th>
 
-                <div class="col-md-4">
-                    <strong>Email</strong>
-                </div>
+                    <td>
 
-                <div class="col-md-8">
-                    {{ $complaint->email }}
-                </div>
+                        {{ $complaint->created_at->format('d M Y H:i') }}
 
-            </div>
+                    </td>
 
-            <div class="row mb-3">
+                </tr>
 
-                <div class="col-md-4">
-                    <strong>Prioritas</strong>
-                </div>
-
-                <div class="col-md-8">
-
-                    <span class="badge bg-{{ $complaint->priority_badge }}">
-                        {{ $complaint->priority_label }}
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Status</strong>
-                </div>
-
-                <div class="col-md-8">
-
-                    <span class="badge bg-{{ $complaint->status_badge }}">
-                        {{ $complaint->status_label }}
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <strong>Tanggal Pengaduan</strong>
-                </div>
-
-                <div class="col-md-8">
-                    {{ $complaint->created_at->format('d M Y H:i') }}
-                </div>
-
-            </div>
+            </table>
 
             <hr>
 
@@ -167,21 +122,92 @@
 
             @if($complaint->attachment)
 
-<hr>
+            <hr>
 
-<h5>Foto Pengaduan</h5>
+            <h5>Bukti Foto Pengaduan</h5>
 
-<img
-src="{{ asset('storage/'.$complaint->attachment) }}"
-class="img-fluid rounded shadow">
+            <div class="text-center">
 
-@endif
+                <img
+                    src="{{ asset('storage/'.$complaint->attachment) }}"
+                    class="img-fluid rounded shadow"
+                    style="max-width:500px;">
+
+            </div>
+
+            @endif
 
         </div>
 
     </div>
 
-    {{-- Respon Admin --}}
+
+    {{-- TRACKING STATUS --}}
+
+    <div class="card shadow border-0 mt-4">
+
+        <div class="card-header bg-warning">
+
+            <h5 class="mb-0">
+
+                Tracking Status Pengaduan
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="progress mb-3" style="height:25px;">
+
+                @php
+
+                    $progress = match($complaint->status){
+
+                        'pending'=>10,
+                        'open'=>25,
+                        'in_review'=>45,
+                        'progress'=>70,
+                        'resolved'=>90,
+                        'closed'=>100,
+                        default=>0
+
+                    };
+
+                @endphp
+
+                <div
+                    class="progress-bar bg-success"
+                    style="width:{{ $progress }}%">
+
+                    {{ $progress }}%
+
+                </div>
+
+            </div>
+
+            <div class="row text-center">
+
+                <div class="col">Pending</div>
+
+                <div class="col">Open</div>
+
+                <div class="col">Review</div>
+
+                <div class="col">Progress</div>
+
+                <div class="col">Resolved</div>
+
+                <div class="col">Closed</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {{-- RIWAYAT RESPON ADMIN --}}
 
     <div class="card shadow border-0 mt-4">
 
@@ -189,7 +215,7 @@ class="img-fluid rounded shadow">
 
             <h5 class="mb-0">
 
-                Riwayat Tanggapan
+                Riwayat Respon Admin
 
             </h5>
 
@@ -199,39 +225,70 @@ class="img-fluid rounded shadow">
 
             @forelse($complaint->responses as $response)
 
-                <div class="border rounded p-3 mb-3">
+                <div class="card mb-3 border-start border-5 border-success">
 
-                    <div class="d-flex justify-content-between">
+                    <div class="card-body">
 
-                        <div>
+                        <div class="d-flex justify-content-between">
 
-                            <strong>
-                                {{ $response->responder_name }}
-                            </strong>
+                            <div>
 
-                            <span class="badge bg-info">
+                                <strong>
 
-                                {{ $response->responder_role }}
+                                    {{ $response->responder_name }}
 
-                            </span>
+                                </strong>
+
+                                <span class="badge bg-primary">
+
+                                    {{ $response->responder_role }}
+
+                                </span>
+
+                            </div>
+
+                            <small>
+
+                                {{ $response->created_at->format('d M Y H:i') }}
+
+                            </small>
 
                         </div>
 
-                        <small>
+                        <hr>
 
-                            {{ $response->created_at->format('d M Y H:i') }}
+                        <p>
 
-                        </small>
+                            {{ $response->message }}
+
+                        </p>
+
+                        {{-- Foto Respon --}}
+
+                        @if($response->attachment)
+
+                            <img
+                                src="{{ asset('storage/'.$response->attachment) }}"
+                                class="img-fluid rounded shadow"
+                                style="max-width:300px;">
+
+                        @endif
+
+                        @if($response->is_final)
+
+                            <div class="mt-3">
+
+                                <span class="badge bg-success">
+
+                                    ✔ Respon Final
+
+                                </span>
+
+                            </div>
+
+                        @endif
 
                     </div>
-
-                    <hr>
-
-                    <p class="mb-0">
-
-                        {{ $response->message }}
-
-                    </p>
 
                 </div>
 
@@ -239,7 +296,7 @@ class="img-fluid rounded shadow">
 
                 <div class="alert alert-warning">
 
-                    Belum ada tanggapan dari admin.
+                    Belum ada respon dari Admin.
 
                 </div>
 

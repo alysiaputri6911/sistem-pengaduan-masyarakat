@@ -2,21 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Complaint extends Model
 {
     use HasFactory;
 
-    /**
-     * Nama tabel
-     */
     protected $table = 'complaints';
 
-    /**
-     * Mass Assignment
-     */
     protected $fillable = [
         'user_id',
         'complaint_code',
@@ -32,111 +26,135 @@ class Complaint extends Model
         'status',
     ];
 
-    /**
-     * Casting Data
-     */
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * Relasi Complaint -> User
-     * Satu pengaduan dimiliki satu user
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONSHIP
+    |--------------------------------------------------------------------------
+    */
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Relasi Complaint -> ComplaintResponse
-     * Satu pengaduan memiliki banyak respon
-     */
-   public function responses()
-{
-    return $this->hasMany(
-        ComplaintResponse::class
-    )->latest();
-}
+    public function responses()
+    {
+        return $this->hasMany(ComplaintResponse::class)
+                    ->latest();
+    }
 
-    /**
-     * Badge warna Bootstrap untuk status
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | STATUS
+    |--------------------------------------------------------------------------
+    */
+
     public function getStatusBadgeAttribute()
     {
         return match ($this->status) {
 
-            'open' => 'secondary',
+            'pending'   => 'secondary',
+
+            'open'      => 'primary',
 
             'in_review' => 'warning',
 
-            'in_progress' => 'primary',
+            'progress'  => 'info',
 
-            'resolved' => 'success',
+            'resolved'  => 'success',
 
-            'closed' => 'dark',
+            'closed'    => 'dark',
 
-            default => 'secondary'
+            default     => 'secondary',
         };
     }
 
-    /**
-     * Badge warna Bootstrap untuk prioritas
-     */
-    public function getPriorityBadgeAttribute()
-    {
-        return match ($this->priority) {
-
-            'low' => 'success',
-
-            'medium' => 'warning',
-
-            'high' => 'danger',
-
-            'critical' => 'dark',
-
-            default => 'secondary'
-        };
-    }
-
-    /**
-     * Format status agar lebih rapi
-     */
     public function getStatusLabelAttribute()
     {
         return match ($this->status) {
 
-            'open' => 'Dibuka',
+            'pending'   => 'Menunggu Admin',
 
-            'in_review' => 'Ditinjau',
+            'open'      => 'Dibuka',
 
-            'in_progress' => 'Diproses',
+            'in_review' => 'Sedang Direview',
 
-            'resolved' => 'Selesai',
+            'progress'  => 'Sedang Diproses',
 
-            'closed' => 'Ditutup',
+            'resolved'  => 'Selesai',
 
-            default => $this->status
+            'closed'    => 'Ditutup',
+
+            default     => ucfirst($this->status),
         };
     }
 
-    /**
-     * Format prioritas agar lebih rapi
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | PRIORITY
+    |--------------------------------------------------------------------------
+    */
+
+    public function getPriorityBadgeAttribute()
+    {
+        return match ($this->priority) {
+
+            'low'       => 'success',
+
+            'medium'    => 'warning',
+
+            'high'      => 'danger',
+
+            'critical'  => 'dark',
+
+            default     => 'secondary',
+        };
+    }
+
     public function getPriorityLabelAttribute()
     {
         return match ($this->priority) {
 
-            'low' => 'Rendah',
+            'low'       => 'Rendah',
 
-            'medium' => 'Sedang',
+            'medium'    => 'Sedang',
 
-            'high' => 'Tinggi',
+            'high'      => 'Tinggi',
 
-            'critical' => 'Kritis',
+            'critical'  => 'Kritis',
 
-            default => $this->priority
+            default     => ucfirst($this->priority),
+        };
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROGRESS BAR
+    |--------------------------------------------------------------------------
+    */
+
+    public function getProgressAttribute()
+    {
+        return match ($this->status) {
+
+            'pending'   => 10,
+
+            'open'      => 25,
+
+            'in_review' => 45,
+
+            'progress'  => 70,
+
+            'resolved'  => 90,
+
+            'closed'    => 100,
+
+            default     => 0,
         };
     }
 }

@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\Admin\ComplaintResponseController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
@@ -17,6 +18,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     Route::post('/complaints/{id}/response',[ComplaintController::class,'response'])
         ->name('admin.complaints.response');
+
+    Route::post(
+    '/complaints/{complaint}/response',
+    [ComplaintResponseController::class, 'store']
+)->name('admin.complaints.response');
 
 });
 

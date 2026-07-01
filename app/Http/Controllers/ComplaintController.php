@@ -89,7 +89,7 @@ class ComplaintController extends Controller
             'email' => auth()->user()->email,
 
             'priority' => 'medium',
-            'status' => 'open',
+            'status' => 'pending',
         ]);
 
         return redirect()
