@@ -9,8 +9,14 @@ Route::get('/', function () {
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
 
-    Route::get('/complaints', [ComplaintController::class, 'index'])
+    Route::get('/complaints',[ComplaintController::class,'index'])
         ->name('admin.complaints.index');
+
+    Route::get('/complaints/{id}',[ComplaintController::class,'show'])
+        ->name('admin.complaints.show');
+
+    Route::post('/complaints/{id}/response',[ComplaintController::class,'response'])
+        ->name('admin.complaints.response');
 
 });
 

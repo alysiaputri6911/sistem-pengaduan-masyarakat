@@ -2,199 +2,503 @@
 
 @section('content')
 
-<h3>
+<div class="container">
 
-Detail Pengaduan
+    @if(session('success'))
 
-</h3>
+        <div class="alert alert-success">
 
-<div class="card mb-4">
+            {{ session('success') }}
 
-<div class="card-body">
+        </div>
 
-<h4>
+    @endif
 
-{{ $complaint->title }}
+    <div class="d-flex justify-content-between mb-3">
 
-</h4>
+        <h3>
 
-<p>
+            Detail Pengaduan
 
-{{ $complaint->description }}
+        </h3>
 
-</p>
+        <a href="{{ route('admin.complaints.index') }}"
+           class="btn btn-secondary">
 
-<hr>
+            Kembali
 
-<strong>
+        </a>
 
-Pelapor :
+    </div>
 
-</strong>
+    <div class="card shadow mb-4">
 
-{{ $complaint->complainant_name }}
+        <div class="card-header bg-primary text-white">
 
-<br>
+            Informasi Pengaduan
 
-<strong>
+        </div>
 
-Status
+        <div class="card-body">
 
-</strong>
+            <table class="table table-bordered">
 
-{{ ($complaint->status) }}
+                <tr>
 
-<br>
+                    <th width="220">
 
-<strong>
+                        Kode Pengaduan
 
-Prioritas
+                    </th>
 
-</strong>
+                    <td>
 
-{{ ($complaint->priority) }}
+                        {{ $complaint->complaint_code }}
 
-</div>
+                    </td>
 
-</div>
+                </tr>
 
-@if($complaint->attachment)
+                <tr>
 
-<div class="card mb-4 shadow-sm">
+                    <th>
 
-    <div class="card-header bg-info text-white">
+                        Judul
 
-        <h5 class="mb-0">
+                    </th>
+
+                    <td>
+
+                        {{ $complaint->title }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>
+
+                        Pelapor
+
+                    </th>
+
+                    <td>
+
+                        {{ $complaint->complainant_name }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>
+
+                        Email
+
+                    </th>
+
+                    <td>
+
+                        {{ $complaint->email }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>
+
+                        No HP
+
+                    </th>
+
+                    <td>
+
+                        {{ $complaint->phone }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>
+
+                        Kategori
+
+                    </th>
+
+                    <td>
+
+                        {{ $complaint->category }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>
+
+                        Lokasi
+
+                    </th>
+
+                    <td>
+
+                        {{ $complaint->location }}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>
+
+                        Prioritas
+
+                    </th>
+
+                    <td>
+
+                        <span class="badge bg-warning">
+
+                            {{ ucfirst($complaint->priority) }}
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>
+
+                        Status
+
+                    </th>
+
+                    <td>
+
+                        <span class="badge bg-info">
+
+                            {{ ucfirst(str_replace('_',' ',$complaint->status)) }}
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>
+
+                        Deskripsi
+
+                    </th>
+
+                    <td>
+
+                        {{ $complaint->description }}
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    @if($complaint->attachment)
+
+    <div class="card shadow mb-4">
+
+        <div class="card-header bg-success text-white">
 
             Bukti Foto Pengaduan
 
-        </h5>
+        </div>
+
+        <div class="card-body text-center">
+
+            <img
+                src="{{ asset('storage/'.$complaint->attachment) }}"
+                class="img-fluid rounded shadow"
+                style="max-width:600px;">
+
+        </div>
 
     </div>
 
-    <div class="card-body text-center">
+    @endif
 
-        <img
-            src="{{ asset('storage/'.$complaint->attachment) }}"
-            class="img-fluid rounded shadow"
-            style="max-width:500px;">
+
+    <div class="card shadow mb-4">
+
+        <div class="card-header bg-dark text-white">
+
+            Respon Admin
+
+        </div>
+
+        <div class="card-body">
+
+            <form
+                action="{{ route('admin.complaints.response',$complaint->id) }}"
+                method="POST"
+                enctype="multipart/form-data">
+
+                @csrf
+
+                <div class="mb-3">
+
+                    <label>
+
+                        Status
+
+                    </label>
+
+                    <select
+                        name="status"
+                        class="form-control">
+
+                        <option value="in_review"
+
+                        {{ $complaint->status=='in_review'?'selected':'' }}>
+
+                            In Review
+
+                        </option>
+
+                        <option value="in_progress"
+
+                        {{ $complaint->status=='in_progress'?'selected':'' }}>
+
+                            In Progress
+
+                        </option>
+
+                        <option value="resolved"
+
+                        {{ $complaint->status=='resolved'?'selected':'' }}>
+
+                            Resolved
+
+                        </option>
+
+                        <option value="closed"
+
+                        {{ $complaint->status=='closed'?'selected':'' }}>
+
+                            Closed
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label>
+
+                        Prioritas
+
+                    </label>
+
+                    <select
+                        name="priority"
+                        class="form-control">
+
+                        <option value="low"
+
+                        {{ $complaint->priority=='low'?'selected':'' }}>
+
+                            Low
+
+                        </option>
+
+                        <option value="medium"
+
+                        {{ $complaint->priority=='medium'?'selected':'' }}>
+
+                            Medium
+
+                        </option>
+
+                        <option value="high"
+
+                        {{ $complaint->priority=='high'?'selected':'' }}>
+
+                            High
+
+                        </option>
+
+                        <option value="critical"
+
+                        {{ $complaint->priority=='critical'?'selected':'' }}>
+
+                            Critical
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label>
+
+                        Pesan Respon
+
+                    </label>
+
+                    <textarea
+                        name="message"
+                        rows="5"
+                        class="form-control"
+                        required></textarea>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label>
+
+                        Upload Foto Tindak Lanjut
+
+                    </label>
+
+                    <input
+                        type="file"
+                        name="attachment"
+                        class="form-control">
+
+                </div>
+
+
+                <div class="form-check mb-3">
+
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="is_final"
+                        value="1">
+
+                    <label>
+
+                        Tandai sebagai Respon Final
+
+                    </label>
+
+                </div>
+
+
+                <button
+                    class="btn btn-primary">
+
+                    Kirim Respon
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card shadow">
+
+        <div class="card-header bg-secondary text-white">
+
+            Riwayat Tracking Pengaduan
+
+        </div>
+
+        <div class="card-body">
+
+            @forelse($complaint->responses as $response)
+
+            <div class="border rounded p-3 mb-3">
+
+                <h6>
+
+                    {{ $response->responder_name }}
+
+                    <span class="badge bg-dark">
+
+                        {{ ucfirst($response->responder_role) }}
+
+                    </span>
+
+                </h6>
+
+                <small class="text-muted">
+
+                    {{ $response->created_at->format('d M Y H:i') }}
+
+                </small>
+
+                <hr>
+
+                <p>
+
+                    {{ $response->message }}
+
+                </p>
+
+                @if($response->attachment)
+
+                    <img
+                        src="{{ asset('storage/'.$response->attachment) }}"
+                        class="img-fluid rounded"
+                        style="max-width:350px;">
+
+                    <br><br>
+
+                @endif
+
+                @if($response->is_final)
+
+                    <span class="badge bg-success">
+
+                        Respon Final
+
+                    </span>
+
+                @endif
+
+            </div>
+
+            @empty
+
+                <div class="alert alert-warning">
+
+                    Belum ada respon dari admin.
+
+                </div>
+
+            @endforelse
+
+        </div>
 
     </div>
 
 </div>
-
-@endif
-
-<div class="card">
-
-<div class="card-header">
-
-Tambah Respon
-
-</div>
-
-<div class="card-body">
-
-<form
-
-method="POST"
-
-action="{{ route('admin.complaints.response',$complaint) }}">
-
-@csrf
-
-<div class="mb-3">
-
-<textarea
-
-name="message"
-
-class="form-control"
-
-rows="5"
-
-required></textarea>
-
-</div>
-
-<div class="form-check mb-3">
-
-<input
-
-class="form-check-input"
-
-type="checkbox"
-
-name="is_final">
-
-<label>
-
-Respon Final
-
-</label>
-
-</div>
-
-<button
-
-class="btn btn-primary">
-
-Kirim Respon
-
-</button>
-
-</form>
-
-</div>
-
-</div>
-
-<hr>
-
-<h4>
-
-Riwayat Respon
-
-</h4>
-
-@foreach($complaint->responses as $response)
-
-<div class="card mb-3">
-
-<div class="card-body">
-
-<strong>
-
-{{ $response->responder_name }}
-
-</strong>
-
-<small>
-
-{{ $response->created_at }}
-
-</small>
-
-<p>
-
-{{ $response->message }}
-
-</p>
-
-@if($response->is_final)
-
-<span class="badge bg-success">
-
-Final
-
-</span>
-
-@endif
-
-</div>
-
-</div>
-
-@endforeach
 
 @endsection

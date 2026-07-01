@@ -185,6 +185,8 @@
 
                 <th>Kode</th>
 
+                <th>Foto</th>
+
                 <th>Judul</th>
 
                 <th>Pelapor</th>
@@ -202,6 +204,17 @@
                 <tr>
 
                     <td>{{ $item->complaint_code }}</td>
+
+                    <td>
+
+@if($item->attachment)
+
+<img src="{{ asset('storage/'.$item->attachment) }}"
+width="70">
+
+@endif
+
+</td>
 
                     <td>{{ $item->title }}</td>
 

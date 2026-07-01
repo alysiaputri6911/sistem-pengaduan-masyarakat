@@ -10,37 +10,59 @@ use Illuminate\Http\Request;
 class ComplaintResponseController extends Controller
 {
     public function store(Request $request, Complaint $complaint)
-    {
+{
+    $request->validate([
 
-        $request->validate([
+        'message' => 'required',
 
-            'message'=>'required'
+        'attachment' => 'nullable|image|max:2048',
 
-        ]);
+        'status' => 'required',
 
-        ComplaintResponse::create([
+        'priority' => 'required'
 
-            'complaint_id'=>$complaint->id,
+    ]);
 
-            'user_id'=>auth()->id(),
+    $photo = null;
 
-            'responder_name'=>auth()->user()->name,
+    if($request->hasFile('attachment')){
 
-            'responder_role'=>'Administrator',
-
-            'message'=>$request->message,
-
-            'is_final'=>$request->has('is_final')
-
-        ]);
-
-        return back()->with(
-
-            'success',
-
-            'Respon berhasil dikirim.'
-
-        );
+        $photo = $request
+            ->file('attachment')
+            ->store('responses','public');
 
     }
+
+    ComplaintResponse::create([
+
+        'complaint_id' => $complaint->id,
+
+        'responder_name' => auth()->user()->name,
+
+        'responder_role' => 'Admin',
+
+        'message' => $request->message,
+
+        'attachment' => $photo,
+
+        'is_final' => $request->has('is_final')
+
+    ]);
+
+    $complaint->update([
+
+        'status' => $request->status,
+
+        'priority' => $request->priority
+
+    ]);
+
+    return back()->with(
+
+        'success',
+
+        'Respon berhasil dikirim.'
+
+    );
+}
 }

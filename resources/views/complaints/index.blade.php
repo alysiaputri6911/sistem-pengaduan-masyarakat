@@ -19,14 +19,14 @@
 
     {{-- Pesan Berhasil --}}
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show">
+    <div class="alert alert-success alert-dismissible fade show">
 
-            {{ session('success') }}
+        {{ session('success') }}
 
-            <button class="btn-close"
-                data-bs-dismiss="alert"></button>
+        <button class="btn-close"
+            data-bs-dismiss="alert"></button>
 
-        </div>
+    </div>
     @endif
 
     <div class="card shadow-sm border-0">
@@ -42,16 +42,15 @@
                     <thead class="table-dark">
 
                         <tr>
-
+                            <th>Kode</th>
                             <th>No</th>
-
                             <th>Judul</th>
-
                             <th>Kategori</th>
-
+                            <th>Foto</th>
                             <th>Status</th>
-
                             <th>Tanggal</th>
+
+
 
                             <th width="180">
                                 Aksi
@@ -67,108 +66,93 @@
 
                         <tr>
 
+                            <td>{{ $complaint->complaint_code }}</td>
+
+                            <td>{{ $loop->iteration }}</td>
+
+                            <!-- Judul -->
                             <td>
-                                {{ $loop->iteration }}
+                                {{ $complaint->title }}
                             </td>
 
+                            <!-- Kategori -->
                             <td>
-
-                                <strong>
-                                    {{ $complaint->title }}
-                                </strong>
-
-                                <br>
-
-                                <small class="text-muted">
-
-                                    {{ Str::limit($complaint->description,60) }}
-
-                                </small>
-
-                            </td>
-
-                            <td>
-
-@if($complaint->attachment)
-
-<img src="{{ asset('storage/'.$complaint->attachment) }}"
-width="100">
-
-@endif
-
-</td>
-
-                            <td>
-
                                 {{ $complaint->category }}
-
                             </td>
 
+                            <!-- Foto -->
                             <td>
 
-                                @if($complaint->status=='open')
+                                @if($complaint->attachment)
 
-                                    <span class="badge bg-warning text-dark">
-                                        Open
-                                    </span>
-
-                                @elseif($complaint->status=='progress')
-
-                                    <span class="badge bg-info">
-                                        Progress
-                                    </span>
-
-                                @elseif($complaint->status=='resolved')
-
-                                    <span class="badge bg-success">
-                                        Resolved
-                                    </span>
+                                <img
+                                    src="{{ asset('storage/'.$complaint->attachment) }}"
+                                    width="100"
+                                    class="rounded border">
 
                                 @else
 
-                                    <span class="badge bg-secondary">
-
-                                        {{ $complaint->status }}
-
-                                    </span>
+                                <span class="text-muted">
+                                    Tidak ada foto
+                                </span>
 
                                 @endif
 
                             </td>
 
+                            <!-- Status -->
+                            <td>
+
+                                <span class="badge bg-warning text-dark">
+
+                                    {{ $complaint->status }}
+
+                                </span>
+
+                            </td>
+
+                            <!-- Tanggal -->
                             <td>
 
                                 {{ $complaint->created_at->format('d M Y') }}
 
                             </td>
 
+                            <!-- Aksi -->
                             <td>
 
-                                <a href="{{ route('complaints.show',$complaint->id) }}"
-                                    class="btn btn-sm btn-info text-white">
+                                <a href="{{ route('complaints.show',$complaint) }}"
+                                    class="btn btn-info btn-sm">
 
                                     Detail
 
                                 </a>
 
+                                <a href="{{ route('complaints.edit',$complaint->id) }}"
+                                    class="btn btn-warning btn-sm">
+
+                                    Edit
+
+                                </a>
+
                                 <form
-                                    action="{{ route('complaints.destroy',$complaint->id) }}"
+                                    action="{{ route('complaints.destroy',$complaint) }}"
                                     method="POST"
                                     class="d-inline">
 
                                     @csrf
-
                                     @method('DELETE')
 
                                     <button
-                                        class="btn btn-sm btn-danger"
-                                        onclick="return confirm('Yakin ingin menghapus pengaduan ini?')">
+                                        class="btn btn-danger btn-sm">
 
                                         Hapus
 
                                     </button>
 
                                 </form>
+
+
 
                             </td>
 

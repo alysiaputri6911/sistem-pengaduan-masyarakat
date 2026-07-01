@@ -53,12 +53,12 @@ class Complaint extends Model
      * Relasi Complaint -> ComplaintResponse
      * Satu pengaduan memiliki banyak respon
      */
-    public function responses()
-    {
-        return $this->hasMany(
-            ComplaintResponse::class
-        );
-    }
+   public function responses()
+{
+    return $this->hasMany(
+        ComplaintResponse::class
+    )->latest();
+}
 
     /**
      * Badge warna Bootstrap untuk status

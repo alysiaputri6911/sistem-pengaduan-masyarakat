@@ -88,17 +88,7 @@
 
             </div>
 
-            @if($complaint->attachment)
-
-<hr>
-
-<h5>Foto Pengaduan</h5>
-
-<img
-src="{{ asset('storage/'.$complaint->attachment) }}"
-class="img-fluid rounded shadow">
-
-@endif
+           
 
             <button
                 type="submit"

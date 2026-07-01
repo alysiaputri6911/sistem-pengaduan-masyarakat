@@ -2,162 +2,207 @@
 
 @section('content')
 
-<div class="container">
+<div class="card shadow border-0">
 
-    <div class="card shadow border-0">
+    <div class="card-header">
 
-        <div class="card-header bg-warning">
+        Edit Pengaduan
 
-            <h4 class="mb-0">
+    </div>
 
-                Edit Pengaduan
+    <div class="card-body">
 
-            </h4>
+        <form action="{{ route('complaints.update', $complaint->id) }}"
+              method="POST"
+              enctype="multipart/form-data">
 
-        </div>
+            @csrf
+            @method('PUT')
 
-        <div class="card-body">
+            <!-- Judul -->
 
-            @if ($errors->any())
+            <div class="mb-3">
 
-                <div class="alert alert-danger">
+                <label class="form-label">
 
-                    <ul class="mb-0">
+                    Judul
 
-                        @foreach ($errors->all() as $error)
+                </label>
 
-                            <li>{{ $error }}</li>
+                <input
+                    type="text"
+                    name="title"
+                    class="form-control @error('title') is-invalid @enderror"
+                    value="{{ old('title', $complaint->title) }}">
 
-                        @endforeach
+                @error('title')
 
-                    </ul>
+                    <div class="invalid-feedback">
 
-                </div>
+                        {{ $message }}
+
+                    </div>
+
+                @enderror
+
+            </div>
+
+            <!-- Kategori -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Kategori
+
+                </label>
+
+                <select
+                    name="category"
+                    class="form-control">
+
+                    <option value="Infrastruktur"
+                        {{ old('category',$complaint->category)=='Infrastruktur' ? 'selected' : '' }}>
+                        Infrastruktur
+                    </option>
+
+                    <option value="Kebersihan"
+                        {{ old('category',$complaint->category)=='Kebersihan' ? 'selected' : '' }}>
+                        Kebersihan
+                    </option>
+
+                    <option value="Keamanan"
+                        {{ old('category',$complaint->category)=='Keamanan' ? 'selected' : '' }}>
+                        Keamanan
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- Lokasi -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Lokasi
+
+                </label>
+
+                <input
+                    type="text"
+                    name="location"
+                    class="form-control @error('location') is-invalid @enderror"
+                    value="{{ old('location', $complaint->location) }}">
+
+                @error('location')
+
+                    <div class="invalid-feedback">
+
+                        {{ $message }}
+
+                    </div>
+
+                @enderror
+
+            </div>
+
+            <!-- Foto Lama -->
+
+            @if($complaint->attachment)
+
+            <div class="mb-3">
+
+                <label class="form-label">
+
+                    Foto Saat Ini
+
+                </label>
+
+                <br>
+
+                <img
+                    src="{{ asset('storage/'.$complaint->attachment) }}"
+                    class="img-thumbnail"
+                    style="max-width:300px">
+
+            </div>
 
             @endif
 
-            <form
-                action="{{ route('complaints.update',$complaint->id) }}"
-                method="POST">
+            <!-- Upload Foto Baru -->
 
-                @csrf
-                @method('PUT')
+            <div class="mb-3">
 
-                <div class="mb-3">
+                <label class="form-label">
 
-                    <label class="form-label">
+                    Ganti Foto (Opsional)
 
-                        Judul Pengaduan
+                </label>
 
-                    </label>
+                <input
+                    type="file"
+                    name="attachment"
+                    class="form-control"
+                    accept="image/*">
 
-                    <input
-                        type="text"
-                        name="title"
-                        class="form-control"
-                        value="{{ old('title',$complaint->title) }}"
-                        required>
+                @error('attachment')
 
-                </div>
+                    <small class="text-danger">
 
-                <div class="mb-3">
+                        {{ $message }}
 
-                    <label class="form-label">
+                    </small>
 
-                        Kategori
+                @enderror
 
-                    </label>
+            </div>
 
-                    <select
-                        name="category"
-                        class="form-select">
+            <!-- Deskripsi -->
 
-                        <option value="Infrastruktur"
-                            {{ $complaint->category == 'Infrastruktur' ? 'selected' : '' }}>
+            <div class="mb-3">
 
-                            Infrastruktur
+                <label class="form-label">
 
-                        </option>
+                    Deskripsi
 
-                        <option value="Kebersihan"
-                            {{ $complaint->category == 'Kebersihan' ? 'selected' : '' }}>
+                </label>
 
-                            Kebersihan
+                <textarea
+                    name="description"
+                    rows="6"
+                    class="form-control @error('description') is-invalid @enderror">{{ old('description',$complaint->description) }}</textarea>
 
-                        </option>
+                @error('description')
 
-                        <option value="Keamanan"
-                            {{ $complaint->category == 'Keamanan' ? 'selected' : '' }}>
+                    <div class="invalid-feedback">
 
-                            Keamanan
+                        {{ $message }}
 
-                        </option>
+                    </div>
 
-                        <option value="Pelayanan Publik"
-                            {{ $complaint->category == 'Pelayanan Publik' ? 'selected' : '' }}>
+                @enderror
 
-                            Pelayanan Publik
+            </div>
 
-                        </option>
+            <button
+                type="submit"
+                class="btn btn-primary">
 
-                    </select>
+                Update Pengaduan
 
-                </div>
+            </button>
 
-                <div class="mb-3">
+            <a
+                href="{{ route('complaints.index') }}"
+                class="btn btn-secondary">
 
-                    <label class="form-label">
+                Batal
 
-                        Lokasi Kejadian
+            </a>
 
-                    </label>
-
-                    <input
-                        type="text"
-                        name="location"
-                        class="form-control"
-                        value="{{ old('location',$complaint->location) }}">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-
-                        Deskripsi Pengaduan
-
-                    </label>
-
-                    <textarea
-                        name="description"
-                        rows="6"
-                        class="form-control"
-                        required>{{ old('description',$complaint->description) }}</textarea>
-
-                </div>
-
-                <div class="d-flex justify-content-between">
-
-                    <a href="{{ route('complaints.index') }}"
-                       class="btn btn-secondary">
-
-                        Kembali
-
-                    </a>
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary">
-
-                        Update Pengaduan
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
+        </form>
 
     </div>
 
