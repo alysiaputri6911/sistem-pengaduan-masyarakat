@@ -24,6 +24,7 @@ class Complaint extends Model
         'description',
         'category',
         'location',
+        'attachment',
         'complainant_name',
         'phone',
         'email',

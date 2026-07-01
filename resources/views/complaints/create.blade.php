@@ -12,11 +12,10 @@
 
     <div class="card-body">
 
-        <form
-            action="{{ route('complaints.store') }}"
-            method="POST">
-
-            @csrf
+        <form action="{{ route('complaints.store') }}"
+      method="POST"
+      enctype="multipart/form-data">
+    @csrf
 
             <div class="mb-3">
 
@@ -65,6 +64,20 @@
             </div>
 
             <div class="mb-3">
+    <label class="form-label">Foto Pengaduan</label>
+
+    <input
+        type="file"
+        name="attachment"
+        class="form-control"
+        accept="image/*">
+
+    @error('attachment')
+        <small class="text-danger">{{ $message }}</small>
+    @enderror
+</div>
+
+            <div class="mb-3">
 
                 <label>Deskripsi</label>
 
@@ -74,6 +87,18 @@
                     class="form-control"></textarea>
 
             </div>
+
+            @if($complaint->attachment)
+
+<hr>
+
+<h5>Foto Pengaduan</h5>
+
+<img
+src="{{ asset('storage/'.$complaint->attachment) }}"
+class="img-fluid rounded shadow">
+
+@endif
 
             <button
                 type="submit"

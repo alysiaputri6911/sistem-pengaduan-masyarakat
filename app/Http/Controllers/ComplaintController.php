@@ -42,43 +42,62 @@ class ComplaintController extends Controller
     /**
      * Menyimpan pengaduan baru.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title'       => 'required|string|max:200',
-            'description' => 'required|string',
-            'category'    => 'nullable|string|max:50',
-            'location'    => 'nullable|string|max:200',
-        ]);
+  public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required|max:255',
+        'description' => 'required',
+        'category' => 'required',
+        'location' => 'required',
+        'attachment' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        Complaint::create([
-            'user_id'          => Auth::id(),
+    $attachment = null;
 
-            'complaint_code'   => 'CMP-' . now()->format('YmdHis'),
-
-            'title'            => $request->title,
-
-            'description'      => $request->description,
-
-            'category'         => $request->category,
-
-            'location'         => $request->location,
-
-            'complainant_name' => Auth::user()->name,
-
-            'phone'            => Auth::user()->phone,
-
-            'email'            => Auth::user()->email,
-
-            'priority'         => 'medium',
-
-            'status'           => 'open',
-        ]);
-
-        return redirect()
-            ->route('complaints.index')
-            ->with('success', 'Pengaduan berhasil dikirim.');
+    if ($request->hasFile('attachment')) {
+        $attachment = $request->file('attachment')
+            ->store('complaints', 'public');
     }
+
+    // Membuat kode pengaduan otomatis
+   $lastComplaint = Complaint::latest('id')->first();
+
+if ($lastComplaint) {
+
+    $lastNumber = (int) substr($lastComplaint->complaint_code, 4);
+
+    $newNumber = $lastNumber + 1;
+
+} else {
+
+    $newNumber = 1;
+
+}
+
+$complaintCode = 'CMP-' . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+    Complaint::create([
+        'user_id' => auth()->id(),
+        'complaint_code' => $complaintCode,
+        'title' => $request->title,
+        'description' => $request->description,
+        'category' => $request->category,
+        'location' => $request->location,
+
+        'attachment' => $attachment,
+
+        // Ambil data dari user yang login
+        'complainant_name' => auth()->user()->name,
+        'phone' => auth()->user()->phone,
+        'email' => auth()->user()->email,
+
+        'priority' => 'medium',
+        'status' => 'open',
+    ]);
+
+    return redirect()
+        ->route('complaints.index')
+        ->with('success', 'Pengaduan berhasil dikirim.');
+}
 
     /**
      * Menampilkan detail pengaduan.

@@ -3,42 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Models\Complaint;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        if(auth()->user()->role=='admin'){
+        if (auth()->user()->role == 'admin') {
 
-            $total=Complaint::count();
+            $total = Complaint::count();
+            $open = Complaint::where('status', 'open')->count();
+            $review = Complaint::where('status', 'in_review')->count();
+            $progress = Complaint::where('status', 'in_progress')->count();
+            $resolved = Complaint::where('status', 'resolved')->count();
+            $closed = Complaint::where('status', 'closed')->count();
 
-            $open=Complaint::where('status','open')->count();
+            $latest = Complaint::latest()->take(5)->get();
 
-            $progress=Complaint::where('status','progress')->count();
+            $chartData = [$open, $review, $progress, $resolved, $closed];
 
-            $resolved=Complaint::where('status','resolved')->count();
-
-            return view('admin.dashboard',compact(
+            return view('admin.dashboard', compact(
                 'total',
                 'open',
+                'review',
                 'progress',
-                'resolved'
+                'resolved',
+                'closed',
+                'latest',
+                'chartData'
             ));
-
         }
 
-        $total=Complaint::where('user_id',auth()->id())->count();
+        $total = Complaint::where('user_id', auth()->id())->count();
 
-        $open=Complaint::where('user_id',auth()->id())
-            ->where('status','open')->count();
+        $open = Complaint::where('user_id', auth()->id())
+            ->where('status', 'open')->count();
 
-        $progress=Complaint::where('user_id',auth()->id())
-            ->where('status','progress')->count();
+        $progress = Complaint::where('user_id', auth()->id())
+            ->where('status', 'in_progress')->count();
 
-        $resolved=Complaint::where('user_id',auth()->id())
-            ->where('status','resolved')->count();
+        $resolved = Complaint::where('user_id', auth()->id())
+            ->where('status', 'resolved')->count();
 
-        return view('citizen.dashboard',compact(
+        return view('citizen.dashboard', compact(
             'total',
             'open',
             'progress',

@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <h3 class="mb-4">
     Data Pengaduan
 </h3>
@@ -64,6 +65,8 @@
 
         <th>Judul</th>
 
+        <th>Foto</th>
+
         <th>Pelapor</th>
 
         <th>Prioritas</th>
@@ -91,6 +94,20 @@
         <td>{{ ucfirst($item->priority) }}</td>
 
         <td>{{ ucfirst($item->status) }}</td>
+
+        <td>
+@if($complaint->attachment)
+
+<img src="{{ asset('storage/'.$complaint->attachment) }}"
+     width="90"
+     class="rounded border">
+
+@else
+
+-
+
+@endif
+</td>
 
         <td>
 

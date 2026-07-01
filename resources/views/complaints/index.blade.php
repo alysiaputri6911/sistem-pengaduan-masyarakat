@@ -89,6 +89,17 @@
 
                             <td>
 
+@if($complaint->attachment)
+
+<img src="{{ asset('storage/'.$complaint->attachment) }}"
+width="100">
+
+@endif
+
+</td>
+
+                            <td>
+
                                 {{ $complaint->category }}
 
                             </td>

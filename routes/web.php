@@ -7,6 +7,13 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+
+    Route::get('/complaints', [ComplaintController::class, 'index'])
+        ->name('admin.complaints.index');
+
+});
+
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
