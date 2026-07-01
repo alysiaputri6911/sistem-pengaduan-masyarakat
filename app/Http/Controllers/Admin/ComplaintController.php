@@ -42,11 +42,29 @@ class ComplaintController extends Controller
 
     public function show(Complaint $complaint)
 {
+    if(auth()->user()->role=='admin'){
+
+    if($complaint->status=='pending'){
+
+        $complaint->update([
+
+            'status'=>'open'
+
+        ]);
+
+    }
+
+    return view(
+        'admin.complaints.show',
+        compact('complaint')
+    );
+
+}
     $complaint->load('responses');
 
     return view(
 
-        'admin.complaints.show',
+        'complaints.show',
 
         compact('complaint')
 
