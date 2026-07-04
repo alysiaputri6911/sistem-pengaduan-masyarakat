@@ -51,72 +51,33 @@
             <ul class="nav flex-column">
 
                 <li class="nav-item">
-
-                    <a href="{{ route('admin.users.index') }}"
-                        class="nav-link">
-
-                        <i class="bi bi-people"></i>
-
-                        User
-
+                    <a href="{{ route('dashboard') }}" class="nav-link">
+                        Dashboard
                     </a>
-
                 </li>
 
-                <li>
-
-                    <a
-                        href="{{ route('admin.complaints.index') }}"
-                        class="nav-link text-white">
-
-                        <i class="bi bi-chat-left-text"></i>
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.complaints.index') }}" class="nav-link">
                         Pengaduan
-
                     </a>
-
                 </li>
 
-                <li>
-
-                    <a
-                        href="#"
-                        class="nav-link text-white">
-
-                        <i class="bi bi-reply"></i>
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.responses.index') }}" class="nav-link">
                         Respon
-
                     </a>
-
                 </li>
 
-                <li>
-
-                    <a
-                        href="#"
-                        class="nav-link text-white">
-
-                        <i class="bi bi-people"></i>
-
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}" class="nav-link">
                         User
-
                     </a>
-
                 </li>
 
-                <li>
-
-                    <a
-                        href="#"
-                        class="nav-link text-white">
-
-                        <i class="bi bi-file-earmark-bar-graph"></i>
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.reports.index') }}" class="nav-link">
                         Laporan
-
                     </a>
-
                 </li>
 
             </ul>
