@@ -9,11 +9,30 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::withCount('complaints')
+                    ->latest()
+                    ->paginate(10);
 
-        return view(
-            'admin.users.index',
-            compact('users')
-        );
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function show(User $user)
+    {
+        $user->load('complaints');
+
+        return view('admin.users.show', compact('user'));
+    }
+
+    public function destroy(User $user)
+    {
+        if($user->role == 'admin'){
+            return back()->with('error','Admin tidak dapat dihapus.');
+        }
+
+        $user->delete();
+
+        return redirect()
+                ->route('admin.users.index')
+                ->with('success','User berhasil dihapus.');
     }
 }
