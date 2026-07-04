@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\Admin\ComplaintController;
 use App\Http\Controllers\Admin\ComplaintResponseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ReportController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -19,9 +20,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     Route::get('/complaints/{id}', [ComplaintController::class, 'show'])
         ->name('admin.complaints.show');
-
-    Route::post('/complaints/{id}/response', [ComplaintController::class, 'response'])
-        ->name('admin.complaints.response');
 
     Route::get('/responses', [ComplaintResponseController::class, 'index'])
         ->name('admin.responses.index');

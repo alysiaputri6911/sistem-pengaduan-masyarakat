@@ -2,13 +2,29 @@
 
 @section('content')
 
-<h3>Data User</h3>
+<div class="d-flex justify-content-between mb-3">
 
-<table class="table table-striped">
+    <h3>Daftar User</h3>
 
-    <thead>
+</div>
+
+@if(session('success'))
+
+<div class="alert alert-success">
+
+    {{ session('success') }}
+
+</div>
+
+@endif
+
+<table class="table table-bordered table-hover">
+
+    <thead class="table-dark">
 
         <tr>
+
+            <th>No</th>
 
             <th>Nama</th>
 
@@ -16,28 +32,85 @@
 
             <th>Role</th>
 
+            <th>Total Pengaduan</th>
+
+            <th>Aksi</th>
+
         </tr>
 
     </thead>
 
     <tbody>
 
-        @foreach($users as $user)
+    @forelse($users as $user)
 
         <tr>
+
+            <td>{{ $loop->iteration }}</td>
 
             <td>{{ $user->name }}</td>
 
             <td>{{ $user->email }}</td>
 
-            <td>{{ ucfirst($user->role) }}</td>
+            <td>
+
+                @if($user->role=='admin')
+
+                    <span class="badge bg-danger">
+
+                        Administrator
+
+                    </span>
+
+                @else
+
+                    <span class="badge bg-success">
+
+                        Citizen
+
+                    </span>
+
+                @endif
+
+            </td>
+
+            <td>
+
+                {{ $user->complaints_count }}
+
+            </td>
+
+            <td>
+
+                <a href="{{ route('admin.users.show',$user) }}"
+                    class="btn btn-info btn-sm">
+
+                    Detail
+
+                </a>
+
+            </td>
 
         </tr>
 
-        @endforeach
+    @empty
+
+        <tr>
+
+            <td colspan="6" class="text-center">
+
+                Tidak ada data.
+
+            </td>
+
+        </tr>
+
+    @endforelse
 
     </tbody>
 
 </table>
+
+{{ $users->links() }}
 
 @endsection
