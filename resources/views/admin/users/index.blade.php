@@ -42,7 +42,7 @@
 
     <tbody>
 
-    @forelse($users as $user)
+        @forelse($users as $user)
 
         <tr>
 
@@ -56,19 +56,19 @@
 
                 @if($user->role=='admin')
 
-                    <span class="badge bg-danger">
+                <span class="badge bg-danger">
 
-                        Administrator
+                    Administrator
 
-                    </span>
+                </span>
 
                 @else
 
-                    <span class="badge bg-success">
+                <span class="badge bg-success">
 
-                        Citizen
+                    Citizen
 
-                    </span>
+                </span>
 
                 @endif
 
@@ -93,7 +93,7 @@
 
         </tr>
 
-    @empty
+        @empty
 
         <tr>
 
@@ -105,7 +105,7 @@
 
         </tr>
 
-    @endforelse
+        @endforelse
 
     </tbody>
 

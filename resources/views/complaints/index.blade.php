@@ -62,7 +62,7 @@
 
                     <tbody>
 
-                        @foreach($complaints as $complaint)
+                        @foreach($complaints as $item)
 
                         <tr>
 
@@ -82,22 +82,27 @@
 
                             <!-- Foto -->
                             <td>
-
-                                @if($complaint->attachment)
-
-                                <img
-                                    src="{{ asset('storage/'.$complaint->attachment) }}"
-                                    width="100"
+                                @if($item->attachment)
+                                <img src="{{ asset('storage/'.$item->attachment) }}"
+                                    width="90"
                                     class="rounded border">
-
                                 @else
-
-                                <span class="text-muted">
-                                    Tidak ada foto
-                                </span>
-
+                                -
                                 @endif
+                            </td>
 
+                            <td>{{ $item->complainant_name }}</td>
+
+                            <td>
+                                <span class="badge bg-danger">
+                                    {{ ucfirst($item->priority) }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success">
+                                    {{ ucfirst(str_replace('_',' ',$item->status)) }}
+                                </span>
                             </td>
 
                             <!-- Status -->
