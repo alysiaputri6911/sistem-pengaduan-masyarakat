@@ -181,25 +181,25 @@
 
             <thead>
 
-            <tr>
+                <tr>
 
-                <th>Kode</th>
+                    <th>Kode</th>
 
-                <th>Foto</th>
+                    <th>Foto</th>
 
-                <th>Judul</th>
+                    <th>Judul</th>
 
-                <th>Pelapor</th>
+                    <th>Pelapor</th>
 
-                <th>Status</th>
+                    <th>Status</th>
 
-            </tr>
+                </tr>
 
             </thead>
 
             <tbody>
 
-            @foreach($latest as $item)
+                @foreach($latest as $item)
 
                 <tr>
 
@@ -207,14 +207,14 @@
 
                     <td>
 
-@if($item->attachment)
+                        @if($item->attachment)
 
-<img src="{{ asset('storage/'.$item->attachment) }}"
-width="70">
+                        <img src="{{ asset('storage/'.$item->attachment) }}"
+                            width="70">
 
-@endif
+                        @endif
 
-</td>
+                    </td>
 
                     <td>{{ $item->title }}</td>
 
@@ -232,7 +232,7 @@ width="70">
 
                 </tr>
 
-            @endforeach
+                @endforeach
 
             </tbody>
 
@@ -245,31 +245,34 @@ width="70">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+    new Chart(document.getElementById('statusChart'), {
 
-new Chart(document.getElementById('statusChart'),{
+        type: 'doughnut',
 
-    type:'doughnut',
+        data: {
 
-    data:{
+            labels: [
+                'pending',
+                'Open',
+                'Review',
+                'Progress',
+                'Resolved',
+                'Closed'
+            ],
 
-        labels:[
-            'Open',
-            'Review',
-            'Progress',
-            'Resolved',
-            'Closed'
-        ],
+            datasets: [{
 
-        datasets:[{
+                labels: 'Jumlah Pengaduan',
 
-            data: chartData
+                data: @json($chartData),
 
-        }]
+                borderWidth:1
 
-    }
+            }]
 
-});
+        }
 
+    });
 </script>
 
 @endsection

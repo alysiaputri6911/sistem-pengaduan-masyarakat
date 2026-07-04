@@ -19,6 +19,15 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::post('/complaints/{id}/response',[ComplaintController::class,'response'])
         ->name('admin.complaints.response');
 
+     Route::get('/responses', [ResponseController::class,'index'])
+        ->name('admin.responses.index');
+
+    Route::get('/users', [UserController::class,'index'])
+        ->name('admin.users.index');
+
+    Route::get('/reports', [ReportController::class,'index'])
+        ->name('admin.reports.index');
+
     Route::post(
     '/complaints/{complaint}/response',
     [ComplaintResponseController::class, 'store']

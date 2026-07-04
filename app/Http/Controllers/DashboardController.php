@@ -12,18 +12,20 @@ class DashboardController extends Controller
         if (auth()->user()->role == 'admin') {
 
             $total = Complaint::count();
+            $pending = Complaint::where('status','pending')->count();
             $open = Complaint::where('status', 'open')->count();
             $review = Complaint::where('status', 'in_review')->count();
-            $progress = Complaint::where('status', 'in_progress')->count();
+            $progress = Complaint::where('status', 'progress')->count();
             $resolved = Complaint::where('status', 'resolved')->count();
             $closed = Complaint::where('status', 'closed')->count();
 
             $latest = Complaint::latest()->take(5)->get();
 
-            $chartData = [$open, $review, $progress, $resolved, $closed];
+            $chartData = [$pending, $open, $review, $progress, $resolved, $closed];
 
             return view('admin.dashboard', compact(
                 'total',
+                'pending',
                 'open',
                 'review',
                 'progress',
@@ -40,7 +42,7 @@ class DashboardController extends Controller
             ->where('status', 'open')->count();
 
         $progress = Complaint::where('user_id', auth()->id())
-            ->where('status', 'in_progress')->count();
+            ->where('status', 'progress')->count();
 
         $resolved = Complaint::where('user_id', auth()->id())
             ->where('status', 'resolved')->count();
