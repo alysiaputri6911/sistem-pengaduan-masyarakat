@@ -74,7 +74,7 @@ class ComplaintController extends Controller
     public function edit(Complaint $complaint)
     {
         return view(
-            'admin.complaints.edit',
+            'admin.complaints.show',
             compact('complaint')
         );
     }

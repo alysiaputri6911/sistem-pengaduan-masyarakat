@@ -96,9 +96,9 @@
         <td>{{ ucfirst($item->status) }}</td>
 
         <td>
-@if($complaint->attachment)
+@if($item->attachment)
 
-<img src="{{ asset('storage/'.$complaint->attachment) }}"
+<img src="{{ asset('storage/'.$item->attachment) }}"
      width="90"
      class="rounded border">
 
@@ -119,13 +119,7 @@
 
             </a>
 
-            <a
-                href="{{ route('admin.complaints.edit',$item->id) }}"
-                class="btn btn-warning btn-sm">
-
-                Edit
-
-            </a>
+            
 
         </td>
 
