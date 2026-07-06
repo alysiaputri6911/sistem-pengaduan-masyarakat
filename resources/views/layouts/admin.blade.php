@@ -24,60 +24,94 @@
     <div class="d-flex">
 
         <!-- Sidebar -->
-
         <div
-            class="bg-primary text-white"
+            class="bg-primary text-white shadow"
             style="width:260px;min-height:100vh;">
 
-            <div class="p-4">
+            <div class="p-4 text-center">
 
-                <h4 class="fw-bold">
-
+                <h4 class="fw-bold text-white mb-0">
                     SIMAS
-
                 </h4>
 
-                <small>
-
-                    Sistem Pengaduan
-                    Masyarakat
-
+                <small class="text-white">
+                    Sistem Pengaduan Masyarakat
                 </small>
 
             </div>
 
-            <hr>
+            <hr class="border-light">
 
-            <ul class="nav flex-column">
+            <ul class="nav flex-column px-2">
 
-                <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link">
-                        Dashboard
+                <li class="nav-item mb-2">
+
+                    <a href="{{ route('dashboard') }}"
+                        class="nav-link text-white fw-semibold rounded py-2 px-3"
+                        style="display:flex;align-items:center;">
+
+                        <i class="bi bi-speedometer2 me-2"></i>
+
+                        <span>Dashboard</span>
+
                     </a>
+
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('admin.complaints.index') }}" class="nav-link">
-                        Pengaduan
+                <li class="nav-item mb-2">
+
+                    <a href="{{ route('admin.complaints.index') }}"
+                        class="nav-link text-white fw-semibold rounded py-2 px-3"
+                        style="display:flex;align-items:center;">
+
+                        <i class="bi bi-file-earmark-text me-2"></i>
+
+                        <span>Pengaduan</span>
+
                     </a>
+
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('admin.responses.index') }}" class="nav-link">
-                        Respon
+                <li class="nav-item mb-2">
+
+                    <a href="{{ route('admin.responses.index') }}"
+                        class="nav-link text-white fw-semibold rounded py-2 px-3"
+                        style="display:flex;align-items:center;">
+
+                        <i class="bi bi-chat-dots me-2"></i>
+
+                        <span>Respon</span>
+
                     </a>
+
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
-                        User
+                <li class="nav-item mb-2">
+
+                    <a href="{{ route('users.index') }}"
+                        class="nav-link text-white fw-semibold rounded py-2 px-3"
+                        style="display:flex;align-items:center;">
+
+                        <i class="bi bi-people me-2"></i>
+
+                        <span>User</span>
+
                     </a>
+
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('admin.reports.index') }}" class="nav-link">
-                        Laporan
+                <li class="nav-item mb-2">
+
+                    <a href="{{ route('admin.reports.index') }}"
+                        class="nav-link text-white fw-semibold rounded py-2 px-3"
+                        style="display:flex;align-items:center;">
+
+                        <i class="bi bi-bar-chart-line me-2"></i>
+
+                        <span>Laporan</span>
+
                     </a>
+
                 </li>
 
             </ul>

@@ -2,50 +2,124 @@
 
 @section('content')
 
-<h3>Data Respon</h3>
+<div class="container-fluid">
 
-<table class="table table-bordered">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <thead>
+        <h3 class="mb-0">
+            Data Respon Pengaduan
+        </h3>
 
-        <tr>
+    </div>
 
-            <th>No</th>
+    @if(session('success'))
 
-            <th>Pengaduan</th>
+        <div class="alert alert-success">
 
-            <th>Admin</th>
+            {{ session('success') }}
 
-            <th>Respon</th>
+        </div>
 
-            <th>Tanggal</th>
+    @endif
 
-        </tr>
+    <div class="card shadow">
 
-    </thead>
+        <div class="card-body">
 
-    <tbody>
+            <div class="table-responsive">
 
-        @foreach($responses as $r)
+                <table class="table table-bordered table-hover align-middle">
 
-        <tr>
+                    <thead class="table-dark">
 
-            <td>{{ $loop->iteration }}</td>
+                        <tr>
 
-            <td>{{ $r->complaint->title }}</td>
+                            <th width="60">No</th>
 
-            <td>{{ $r->responder_name }}</td>
+                            <th>Kode</th>
 
-            <td>{{ $r->message }}</td>
+                            <th>Judul Pengaduan</th>
 
-            <td>{{ $r->created_at->format('d-m-Y') }}</td>
+                            <th>Admin</th>
 
-        </tr>
+                            <th>Respon</th>
 
-        @endforeach
+                            <th>Final</th>
 
-    </tbody>
+                            <th>Tanggal</th>
 
-</table>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @forelse($responses as $r)
+
+                        <tr>
+
+                            <td>{{ $loop->iteration }}</td>
+
+                            <td>{{ $r->complaint->complaint_code ?? '-' }}</td>
+
+                            <td>{{ $r->complaint->title ?? '-' }}</td>
+
+                            <td>{{ $r->responder_name }}</td>
+
+                            <td>{{ $r->message }}</td>
+
+                            <td>
+
+                                @if($r->is_final)
+
+                                    <span class="badge bg-success">
+                                        Ya
+                                    </span>
+
+                                @else
+
+                                    <span class="badge bg-secondary">
+                                        Tidak
+                                    </span>
+
+                                @endif
+
+                            </td>
+
+                            <td>{{ $r->created_at->format('d-m-Y H:i') }}</td>
+
+                        </tr>
+
+                        @empty
+
+                        <tr>
+
+                            <td colspan="7" class="text-center text-muted">
+
+                                Belum ada respon pengaduan.
+
+                            </td>
+
+                        </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="mt-3">
+
+                {{ $responses->links() }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 @endsection
