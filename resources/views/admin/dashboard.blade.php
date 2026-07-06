@@ -68,7 +68,7 @@
 
                 <h6>Progress</h6>
 
-                <h2>{{ $in_progress }}</h2>
+                <h2>{{ $progress }}</h2>
 
             </div>
 
@@ -159,7 +159,7 @@
 
                     <tr>
                         <td>Masih Diproses</td>
-                        <td>{{ $in_progress }}</td>
+                        <td>{{ $progress }}</td>
                     </tr>
 
                 </table>
