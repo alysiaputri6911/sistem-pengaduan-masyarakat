@@ -64,7 +64,7 @@ class Complaint extends Model
 
             'in_review' => 'warning',
 
-            'progress'  => 'info',
+            'in_progress'  => 'info',
 
             'resolved'  => 'success',
 
@@ -84,7 +84,7 @@ class Complaint extends Model
 
             'in_review' => 'Sedang Direview',
 
-            'progress'  => 'Sedang Diproses',
+            'in_progress'  => 'Sedang Diproses',
 
             'resolved'  => 'Selesai',
 
@@ -148,7 +148,7 @@ class Complaint extends Model
 
             'in_review' => 45,
 
-            'progress'  => 70,
+            'in_progress'  => 70,
 
             'resolved'  => 90,
 

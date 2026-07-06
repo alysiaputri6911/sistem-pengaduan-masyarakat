@@ -15,7 +15,7 @@ class DashboardController extends Controller
             $pending = Complaint::where('status','pending')->count();
             $open = Complaint::where('status', 'open')->count();
             $review = Complaint::where('status', 'in_review')->count();
-            $progress = Complaint::where('status', 'progress')->count();
+            $progress = Complaint::where('status', 'in_progress')->count();
             $resolved = Complaint::where('status', 'resolved')->count();
             $closed = Complaint::where('status', 'closed')->count();
 
@@ -42,7 +42,7 @@ class DashboardController extends Controller
             ->where('status', 'open')->count();
 
         $progress = Complaint::where('user_id', auth()->id())
-            ->where('status', 'progress')->count();
+            ->where('status', 'in_progress')->count();
 
         $resolved = Complaint::where('user_id', auth()->id())
             ->where('status', 'resolved')->count();

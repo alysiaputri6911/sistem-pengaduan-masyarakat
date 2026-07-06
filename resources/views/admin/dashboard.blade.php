@@ -8,21 +8,25 @@
 
 <div class="row g-3">
 
-    <div class="col-md-2">
+    <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
 
-        <div class="card shadow border-0 bg-primary text-white">
+    <div class="card shadow-sm border-0">
 
-            <div class="card-body">
+        <div class="card-body text-center py-3">
 
-                <h6>Total</h6>
+            <h6 class="text-muted mb-1">
+                Total Pengaduan
+            </h6>
 
-                <h2>{{ $total }}</h2>
-
-            </div>
+            <h3 class="fw-bold text-primary mb-0">
+                {{ $total }}
+            </h3>
 
         </div>
 
     </div>
+
+</div>
 
     <div class="col-md-2">
 
@@ -64,7 +68,7 @@
 
                 <h6>Progress</h6>
 
-                <h2>{{ $progress }}</h2>
+                <h2>{{ $in_progress }}</h2>
 
             </div>
 
@@ -110,7 +114,7 @@
 
     <div class="col-md-6">
 
-        <div class="card shadow border-0">
+        <div class="card shadow-sm">
 
             <div class="card-header">
 
@@ -120,7 +124,8 @@
 
             <div class="card-body">
 
-                <canvas id="statusChart"></canvas>
+                <canvas id="statusChart"
+                style="max-height:300px;"></canvas>
 
             </div>
 
@@ -154,7 +159,7 @@
 
                     <tr>
                         <td>Masih Diproses</td>
-                        <td>{{ $progress }}</td>
+                        <td>{{ $in_progress }}</td>
                     </tr>
 
                 </table>

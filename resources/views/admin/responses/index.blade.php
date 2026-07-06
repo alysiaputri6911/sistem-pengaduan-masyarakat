@@ -14,11 +14,11 @@
 
     @if(session('success'))
 
-        <div class="alert alert-success">
+    <div class="alert alert-success">
 
-            {{ session('success') }}
+        {{ session('success') }}
 
-        </div>
+    </div>
 
     @endif
 
@@ -72,15 +72,15 @@
 
                                 @if($r->is_final)
 
-                                    <span class="badge bg-success">
-                                        Ya
-                                    </span>
+                                <span class="badge bg-success">
+                                    Ya
+                                </span>
 
                                 @else
 
-                                    <span class="badge bg-secondary">
-                                        Tidak
-                                    </span>
+                                <span class="badge bg-secondary">
+                                    Tidak
+                                </span>
 
                                 @endif
 
