@@ -36,28 +36,19 @@
             @if($complaints->count())
 
             <div class="table-responsive">
-
-                <table class="table table-hover align-middle">
+                <table class="table table-hover align-middle text-center">
 
                     <thead class="table-dark">
-
                         <tr>
                             <th>Kode</th>
-                            <th>No</th>
                             <th>Judul</th>
                             <th>Kategori</th>
                             <th>Foto</th>
+                            <th>Prioritas</th>
                             <th>Status</th>
                             <th>Tanggal</th>
-
-
-
-                            <th width="180">
-                                Aksi
-                            </th>
-
+                            <th width="220">Aksi</th>
                         </tr>
-
                     </thead>
 
                     <tbody>
@@ -66,82 +57,105 @@
 
                         <tr>
 
-                            <td>{{ $complaint->complaint_code }}</td>
-
-                            <td>{{ $loop->iteration }}</td>
-
-                            <!-- Judul -->
                             <td>
-                                {{ $complaint->title }}
+                                {{ $item->complaint_code }}
                             </td>
 
-                            <!-- Kategori -->
-                            <td>
-                                {{ $complaint->category }}
+                            <td class="text-start">
+                                {{ $item->title }}
                             </td>
 
-                            <!-- Foto -->
                             <td>
+                                {{ $item->category }}
+                            </td>
+
+                            <td>
+
                                 @if($item->attachment)
+
                                 <img src="{{ asset('storage/'.$item->attachment) }}"
-                                    width="90"
-                                    class="rounded border">
+                                    width="80"
+                                    height="60"
+                                    class="rounded shadow-sm border"
+                                    style="object-fit:cover;">
+
                                 @else
-                                -
+
+                                <span class="text-muted">
+                                    Tidak ada
+                                </span>
+
                                 @endif
-                            </td>
-
-                            <td>{{ $item->complainant_name }}</td>
-
-                            <td>
-                                <span class="badge bg-danger">
-                                    {{ ucfirst($item->priority) }}
-                                </span>
-                            </td>
-
-                            <td>
-                                <span class="badge bg-success">
-                                    {{ ucfirst(str_replace('_',' ',$item->status)) }}
-                                </span>
-                            </td>
-
-                            <!-- Status -->
-                            <td>
-
-                                <span class="badge bg-warning text-dark">
-
-                                    {{ $complaint->status }}
-
-                                </span>
 
                             </td>
 
-                            <!-- Tanggal -->
                             <td>
 
-                                {{ $complaint->created_at->format('d M Y') }}
+                                @if($item->priority=='low')
+                                <span class="badge bg-secondary">Low</span>
+
+                                @elseif($item->priority=='medium')
+                                <span class="badge bg-warning text-dark">Medium</span>
+
+                                @elseif($item->priority=='high')
+                                <span class="badge bg-danger">High</span>
+
+                                @else
+                                <span class="badge bg-dark">Critical</span>
+
+                                @endif
 
                             </td>
 
-                            <!-- Aksi -->
                             <td>
 
-                                <a href="{{ route('complaints.show',$complaint) }}"
+                                @switch($item->status)
+
+                                @case('pending')
+                                <span class="badge bg-warning text-dark">Pending</span>
+                                @break
+
+                                @case('open')
+                                <span class="badge bg-primary">Open</span>
+                                @break
+
+                                @case('in_review')
+                                <span class="badge bg-info">Review</span>
+                                @break
+
+                                @case('in_progress')
+                                <span class="badge bg-secondary">Proses</span>
+                                @break
+
+                                @case('resolved')
+                                <span class="badge bg-success">Selesai</span>
+                                @break
+
+                                @case('closed')
+                                <span class="badge bg-dark">Closed</span>
+                                @break
+
+                                @endswitch
+
+                            </td>
+
+                            <td>
+                                {{ $item->created_at->format('d M Y') }}
+                            </td>
+
+                            <td>
+
+                                <a href="{{ route('complaints.show',$item) }}"
                                     class="btn btn-info btn-sm">
-
                                     Detail
-
                                 </a>
 
-                                <a href="{{ route('complaints.edit',$complaint->id) }}"
+                                <a href="{{ route('complaints.edit',$item) }}"
                                     class="btn btn-warning btn-sm">
-
                                     Edit
-
                                 </a>
 
-                                <form
-                                    action="{{ route('complaints.destroy',$complaint) }}"
+                                <form action="{{ route('complaints.destroy',$item) }}"
                                     method="POST"
                                     class="d-inline">
 
@@ -149,15 +163,14 @@
                                     @method('DELETE')
 
                                     <button
-                                        class="btn btn-danger btn-sm">
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Yakin ingin menghapus?')">
 
                                         Hapus
 
                                     </button>
 
                                 </form>
-
-
 
                             </td>
 
@@ -168,9 +181,7 @@
                     </tbody>
 
                 </table>
-
             </div>
-
             @else
 
             <div class="text-center py-5">

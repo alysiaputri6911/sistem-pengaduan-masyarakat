@@ -1,4 +1,6 @@
-<x-guest-layout>
+@extends('layouts.guest')
+
+@section('content')
 
 <div class="container">
 
@@ -62,9 +64,9 @@
                                     autofocus>
 
                                 @error('email')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
                                 @enderror
                             </div>
 
@@ -78,9 +80,9 @@
                                     required>
 
                                 @error('password')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
                                 @enderror
                             </div>
 
@@ -96,18 +98,18 @@
                                 </label>
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">
-                                Login
-                            </button>
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
 
-                            @if (Route::has('password.request'))
-                                <div class="text-center mt-4">
-                                    <a href="{{ route('password.request') }}"
-                                       class="text-decoration-none">
-                                        Lupa Password?
-                                    </a>
-                                </div>
-                            @endif
+                            <div class="d-flex justify-content-between mt-3">
+                                <a href="{{ route('password.request') }}" class="text-decoration-none">
+                                    Lupa Password?
+                                </a>
+
+                                <a href="{{ route('register') }}" class="btn btn-outline-primary btn-sm">
+                                    Register
+                                </a>
+                            </div>
+
 
                         </form>
 
@@ -123,4 +125,4 @@
 
 </div>
 
-</x-guest-layout>
+@endsection

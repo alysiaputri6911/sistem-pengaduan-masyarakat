@@ -17,7 +17,7 @@
 
 <body class="bg-light">
 
-    {{ $slot }}
+    @yield('content')
 
 </body>
 

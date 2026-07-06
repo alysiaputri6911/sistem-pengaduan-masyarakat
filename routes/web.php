@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // User
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\admin\ComplaintController;
+use App\Http\Controllers\ComplaintController;
 
 // Admin
 use App\Http\Controllers\Admin\ComplaintController as AdminComplaintController;

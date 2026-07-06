@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 
 class ComplaintController extends Controller
 {
+    public function updateStatus(Request $request, Complaint $complaint)
+    {
+        $complaint->status = $request->status;
+        $complaint->save();
+
+        Mail::to($complaint->user->email)
+            ->send(new ComplaintStatusMail($complaint));
+
+        return back()->with('success', 'Status berhasil diubah dan email telah dikirim.');
+    }
+
     public function index(Request $request)
     {
         $query = Complaint::query();
@@ -26,7 +37,6 @@ class ComplaintController extends Controller
                 $q->where('title', 'like', "%{$request->search}%")
                     ->orWhere('complaint_code', 'like', "%{$request->search}%")
                     ->orWhere('complainant_name', 'like', "%{$request->search}%");
-
             });
         }
 
@@ -41,35 +51,33 @@ class ComplaintController extends Controller
     }
 
     public function show(Complaint $complaint)
-{
-    if(auth()->user()->role=='admin'){
+    {
+        if (auth()->user()->role == 'admin') {
 
-    if($complaint->status=='pending'){
+            if ($complaint->status == 'pending') {
 
-        $complaint->update([
+                $complaint->update([
 
-            'status'=>'open'
+                    'status' => 'open'
 
-        ]);
+                ]);
+            }
 
+            return view(
+                'admin.complaints.show',
+                compact('complaint')
+            );
+        }
+        $complaint->load('responses');
+
+        return view(
+
+            'complaints.show',
+
+            compact('complaint')
+
+        );
     }
-
-    return view(
-        'admin.complaints.show',
-        compact('complaint')
-    );
-
-}
-    $complaint->load('responses');
-
-    return view(
-
-        'complaints.show',
-
-        compact('complaint')
-
-    );
-}
 
     public function edit(Complaint $complaint)
     {
