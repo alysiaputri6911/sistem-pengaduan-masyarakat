@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Complaint;
 use App\Models\ComplaintResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ComplaintStatusMail;
 
 class ComplaintResponseController extends Controller
 {
@@ -57,6 +59,9 @@ class ComplaintResponseController extends Controller
             'status' => $request->status,
             'priority' => $request->priority,
         ]);
+
+        Mail::to($complaint->email)
+            ->send(new ComplaintStatusMail($complaint));
 
         return redirect()
             ->back()
