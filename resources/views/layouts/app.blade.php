@@ -12,7 +12,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" href="{{ route('dashboard') }}">
-            Sistem Pengaduan
+            Sistem Pengaduan Masyarakat
         </a>
 
         <div class="ms-auto">
